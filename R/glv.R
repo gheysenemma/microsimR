@@ -1,13 +1,13 @@
 #' @title Simulate time series with the generalized Lotka-Volterra model
 #'
 #' @description Simulate a community time series using the generalized Lotka-Volterra model, defined as
-#' \eqn{\frac{dx}{dt}=x(b+Ax)}, where x is the vector of species abundances, A is the interaction matrix
-#' and b the vector of growth rates.
+#' \eqn{\frac{dx}{dt}=x(pbirth+Ax)}, where x is the vector of species abundances, A is the interaction matrix
+#' and pbirth the vector of growth rates.
 #'
 #' @param N species number
 #' @param A interaction matrix
-#' @param b growth rates
-#' @param y initial abundances
+#' @param pbirth growth rates
+#' @param com initial abundances
 #' @param tstart initial time point
 #' @param tend final time point
 #' @param tstep time step
@@ -18,10 +18,10 @@
 #' tsplot(glv(N=4,generateA(4)),header="gLV")
 #' @export
 
-glv<-function(N=4,A,b=runif(N),y=runif(N),tstart=0,tend=100,tstep=0.1, perturb=NULL){
+glv<-function(N=4,A,pbirth=runif(N),com=runif(N),tstart=0,tend=100,tstep=0.1, perturb=NULL){
   # checks perturb object and includes in parms
   # parms as matrix
-  parms=cbind(b,A)
+  parms=cbind(pbirth,A)
   parms=cbind(rep(N,N),parms)
   if (!is.null(perturb)){
     if (length(perturb$growthchanges) != N){
@@ -48,7 +48,7 @@ glv<-function(N=4,A,b=runif(N),y=runif(N),tstart=0,tend=100,tstep=0.1, perturb=N
   }
   times<-seq(tstart, tend, by=tstep)
   # run the simulation
-  commtime<-lsoda(y, times, glvsolve, parms)
+  commtime<-lsoda(com, times, glvsolve, parms)
   time=commtime[,1]
   commtime=commtime[,2:ncol(commtime)]
   commtime=t(commtime)
@@ -62,16 +62,16 @@ glv<-function(N=4,A,b=runif(N),y=runif(N),tstart=0,tend=100,tstep=0.1, perturb=N
 
 # matrix formulation of the ODE set
 # t: current simulation time
-# y: vector with current values of state variables (initial conditions)
+# com: vector with current values of state variables (initial conditions)
 # parms: parameter values
 #
-glvsolve<-function(t, y, parms){
+glvsolve<-function(t, com, parms){
   N=parms[1,1]  # species number
-  b=parms[,2]   # vector of growth rates
+  pbirth=parms[,2]   # vector of growth rates
   A=parms[,3:(N+2)] # interaction matrix
   if (length(parms[1,]) == (N+3)){
     c=parms[,(N+3)]
-    b = b + c
+    pbirth = pbirth + c
   }
   else if (length(parms[1,]) > (N+3)){
     c=parms[,(N+3)]
@@ -83,11 +83,11 @@ glvsolve<-function(t, y, parms){
       tstart = times[i]
       tend = times[i] + durations[i]
       if ((t>tstart) & (t<tend)){
-        b = b + c
-        #print(b)
+        pbirth = pbirth + c
+        #print(pbirth)
       }
     }
   }
-  dydt <- y*(b+A %*% y)
+  dydt <- com*(pbirth+A %*% com)
   list(dydt)
 }

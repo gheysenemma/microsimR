@@ -7,7 +7,17 @@ Hubbell community simulation
 Neutral species abundances simulation according to the Hubbell model.
 }
 \usage{
-hubbell(N, M, I, d, mprob = NA, m, lprob = NA, lpop = NA, tskip = 0, tend, norm = FALSE)
+hubbell(N,
+  M,
+  I,
+  d,
+  pmigr = NULL,
+  m,
+  pbirth = NULL,
+  com = NULL,
+  tskip = 0,
+  tend,
+  norm = FALSE)
 }
 \arguments{
   \item{N}{
@@ -22,23 +32,17 @@ Fixed amount of individuals in the local community
   \item{d}{
 Fixed amount of deaths of local community individuals in each generation
 }
-  \item{mprob}{
-Species proportions in the metacommunity, or migration probability vector for each species of the metacommunity to replace a death in the local community. When given, length of the vector must be equal to M. By default set to 'NA': normalised random deviates from the uniform distribution are used.
+  \item{pbirth}{
+probabilities of birth
 }
   \item{m}{
 Immigration rate: the probability that a death in the local community is replaced by a migrant of the metacommunity rather than by the birth of a local community member
 }
-  \item{lprob}{
-Species proportions in the local community, or birth probability vector
-for each species of the local community to replace a death in the local community.
-When given, length of the vector must be equal to N.
-By default set to 'NA': normalised random deviates from the uniform distribution
-are used.
+  \item{pmigr}{
+probabilities of migration
 }
-  \item{lpop}{
-Vector of the species indexes initially in the local community.
-When given, length of the vector must be equal to I. By default set to 'NA':
-I species indexes are initially randomly sampled from 1 to N.
+  \item{com}{
+initial community vector of length M where the ith element is the amount of individuals of the ith species
 }
   \item{tskip}{
 Number of generations that should not be included in the outputted species abundance matrix.
@@ -65,7 +69,7 @@ lprob = c(0.55,0.12,0.03,0.58,0.12)
 lpop = sample(1:5, 1000, replace = TRUE)
 
 hubbell(I = 1000, N = 5, M = 10, d = 12,
-    mprob = mprob, lprob = lprob, lpop = lpop,
+    pmigr = mprob, pbirth = lprob, com = lpop,
     m = 0.02, tskip = 800, tend = 1000, norm = TRUE)
 }
 

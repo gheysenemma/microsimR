@@ -24,6 +24,7 @@ soi <- function(
   A = generateA(N, c = 0.1), # interaction matrix
   migr_rates = runif(N, min = 0.1, max = 0.8), # species-specific immigration rates
   death_rates = runif(N, min = 0.01, max = 0.08), # species-specific extinction/death rates
+  com = NULL,# initial abundances/counts (community) vector
   tend, # nr of generations to be returned
   k = 5, # parameter limiting the nr of reactions (transitions) in a certain time interval
   perturb = NULL, # perturbation object: TO DO
@@ -34,8 +35,20 @@ soi <- function(
 
   # initial counts vector based on migration rates of the species
   # additional draw from the uniform distribution for the empty sites
-  counts <- c(migr_rates, runif(1))
-  counts <- round((counts/sum(counts))*I)
+  if(is.null(com)){
+    counts <- c(migr_rates, runif(1))
+    counts <- round((counts/sum(counts))*I)
+  } else if (I < sum(com)){
+    stop("the counts in the com vector cannot sum up to more than the number of individuals I")
+  } else if(length(com) == N+1){
+    counts <- com
+  } else if(length(com) == N){
+    empty_count <- I - sum(com)
+    counts <- c(com, empty_count)
+  } else {
+    stop("com vector argument can only be either of length N, or N+1 in case the number of empty sites are included")
+  }
+
 
   # making sure counts vector adds up to I with the empty sites
   # (if not, the difference is added or subtracted from the empty sites to get a total of I)

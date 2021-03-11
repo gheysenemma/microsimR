@@ -7,8 +7,8 @@
 glv(
   N = 4,
   A,
-  b = runif(N),
-  y = runif(N),
+  pbirth = runif(N),
+  com = runif(N),
   tstart = 0,
   tend = 100,
   tstep = 0.1,
@@ -20,9 +20,9 @@ glv(
 
 \item{A}{interaction matrix}
 
-\item{b}{growth rates}
+\item{pbirth}{growth rates}
 
-\item{y}{initial abundances}
+\item{com}{initial abundances}
 
 \item{tstart}{initial time point}
 

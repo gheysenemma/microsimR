@@ -5,20 +5,11 @@
 #' @param N Amount of different species initially in the local community
 #' @param M Amount of different species in the metacommunity, including those of the local community
 #' @param d Fixed amount of deaths of local community individuals in each generation
-#' @param mprob Species proportions in the metacommunity, or migration probability vector
-#' for each species of the metacommunity to replace a death in the local community.
-#' When given, length of the vector must be equal to M. By default set to 'NA':
-#' normalised random deviates from the uniform distribution are used.
+#' @param pbirth probabilities of birth
 #' @param m Immigration rate: the probability that a death in the local community is
 #' replaced by a migrant of the metacommunity rather than by the birth of a local community member
-#' @param lprob Species proportions in the local community, or birth probability vector
-#' for each species of the local community to replace a death in the local community.
-#' When given, length of the vector must be equal to N.
-#' By default set to 'NA': normalised random deviates from the uniform distribution
-#' are used.
-#' @param lpop Vector of the species indexes initially in the local community.
-#' When given, length of the vector must be equal to I. By default set to 'NA':
-#' I species indexes are initially randomly sampled from 1 to N.
+#' @param pmigr probabilities of migration
+#' @param com initial community vector of length M where the ith element is the amount of individuals of the ith species
 #' @param tskip Nr of generations that should not be included in the outputted species
 #' abundance matrix.
 #' @param tend Nr of simulations to be simulated.
@@ -29,90 +20,103 @@
 #' @export
 
 hubbell <- function(
-  I, # Total individuals to be considered in the local community
-  N, # Amount of species initially in the local community
-  M, # Amount of metacomunnity species (INCLUDING LOCAL COMMUNITY SPECIES?)
-  d = 10, # fixed amount of deaths in each generation
-  mprob = NA, #Species proportions in metacommunity - probability for a species to migrate to the local community
-  m = 0.02, # immigration rate (probability death individuum is replaced by individuum of local community)
-  lprob = NA, #Species proportions in the local community - probabilities for the local species for 'birth' in the local community
-  lpop = NA, # Contains the species index that are in the local community
-  tskip = 0, # Timepoints to not include in the returned time series
-  tend = 1000, # Timesteps
+  I, # community size (nr of individuals)
+  N = NULL, # amount of local species
+  M = NULL, # amount of meta species, incl local species (total species)
+  d, # nr of deaths per generation
+  m, # immigration rate (probability dead indiv replaced by meta-indiv)
+  com = NULL, # initial community vector of length M where the ith element is the amount of individuals of the ith species
+  pbirth = NULL, # probabilities of birth
+  pmigr = NULL, # probabilities of migration
+  tskip = 0, # amount of timepoints to not return
+  tend, # amount of time points
   norm = FALSE
 ){
-  options(warn = -1) # supress warning messages (annoying in loops)
+  #####################################################################################
+  # First setting the function arguments right
 
-  # Getting the parameters correct:
-
-  # If mprob / lprob are not given as an argument, use normalised random deviates from uniform distribution for probabilities
-  if (sum(is.na(mprob)) > 0){ # equivalent to if set to NA (type conversion prob fixed)
-    mprob =  runif(M, min = 0, max = 1)
-    mprob = mprob/sum(mprob) # normalising: need to sum up to 1
-  } else if (length(mprob) != M){
-    stop("mprob vector must contain M elements, for each species of the metacommunity a migration probability")
-  }
-
-  if (sum(is.na(lprob)) > 0){
-    lprob = runif(N, min = 0, max = 1)
-    lprob = lprob/sum(lprob)
-  } else if (length(lprob) != N){
-    stop("lprob vector must contain N elements, for each species of the local community a birth probability")
-  }
-
-  if (sum(is.na(lpop)) > 0){
-    lpop = sample(1:N, I, replace = TRUE)
-  } else if (length(lpop) != I){
-    stop("lpop vector must contain I elements, a species index for each individual initially in the local community")
-  }
-
-  # Initialize output time series matrix
-  tseries=matrix(NA,nrow=M,ncol=(tend-tskip))
-
-  # Add count of initial local community to tseries matrix
-  ## only if timestep not to be skipped
-  if(tskip == 0){
-    tseries[,1] = countSpecies(lpop, M)
-  }
-
-  # Now loop over remaining of time series
-  for (t in 2:tend){
-    # lpop death coordinates of the species to be killed
-    dcoor = sample(1:I, d)
-
-    # Determine replacement of each death:
-    ## 1 = birth (replaced by birth of local community species)
-    ## 0 = migration (replaced by migration of a metacommunity species to the local community)
-    event = rbinom(n = d, size = 1, prob = m)
-    event[which(is.na(event))] = 0 # omitting warning message
-
-    # Which species will replace the deaths?
-    births = ((1:N)%*%rmultinom(n = d, size=1, prob=lprob))*event
-    migrants = ((1:M)%*%rmultinom(n = d, size = 1, prob = mprob))*as.numeric(!event)
-    replacers = births + migrants
-
-    lpop[dcoor] = replacers
-
-    if(t > tskip){
-      tseries[,(t-tskip)] = countSpecies(lpop, M)
+  if(is.null(N) & is.null(pbirth)){
+    stop("Please give the amount of local species N or a birth probability vector of length N")
+  } else if (is.null(N)){
+    if(sum(pbirth)==1){
+      N = length(pbirth[pbirth>0])
+    } else {
+      stop("pbirth probability vector must be values between 0 and 1, and sum up to 1")
     }
+  } else if (is.null(pbirth)){
+    pbirth = c(
+      # Local species: probabilities of birth from uniform distribution
+      runif(N, min = 0, max = 1),
+      # Meta species: probabilities of birth initially set to 0
+      rep(0, times = (M - N))
+    )
+    pbirth = pbirth/sum(pbirth)
+  } else if (sum(pbirth>0)>N){
+    stop("do not give more nonzero probabilties in the pbirth vector than there are local species")
+  } else if (!is.null(pbirth)){
+    pbirth = c(pbirth, rep(0, times = (M-N)))
+    pbirth = pbirth/sum(pbirth)
   }
-  colnames(tseries) = seq(from = tskip+1, to = tend)
-  rownames(tseries) = 1:nrow(tseries)
+  sp_names <- paste0("sp_", 1:M)
+  names(pbirth) <- sp_names
 
-  options(warn = 0) # turn warning messages back on
+  if(is.null(M) & is.null(pmigr)){
+    stop("Please give the amount of meta species M (incl local) or a migration probability vector of length M")
+  } else if (is.null(M)){
+    if(sum(pmigr)==1){
+      M = length(pmigr)
+    } else {
+      stop("pmigr probability vector must be values between 0 and 1, and sum up to 1")
+    }
+  } else if (is.null(pmigr)){
+    pmigr = runif(M, min = 0, max = 1)
+    pmigr = pmigr/sum(pmigr)
+  } else if (length(pmigr)!=M){
+    stop("pmigr vector must be of length M")
+  }
+  names(pmigr) <- sp_names
+
+  if(is.null(com)){
+    com = round(I*pbirth)
+  } else if (length(com)!=M){
+    stop("length of com vector must be equal to M")
+  }
+  names(com) <- sp_names
+
+  #################################################################################
+  # The simulation
+
+  tseries <- matrix(0, nrow = M, ncol = tend)
+  colnames(tseries) <- paste0("t", 1:tend)
+  rownames(tseries) <- sp_names
+
+  tseries[,1] <- com
+  for (t in 2:tend){
+    # Each iteration the probability of births is updated by the counts
+    pbirth <- com/sum(com)
+    pbirth[pbirth < 0] <- 0
+    # Probability of births is used to pick the species that will die
+    # because species with count 0 will have probability 0 and species not present in the community can also not die
+    deaths <- rmultinom(n = 1, size = d, prob = pbirth)
+    while(sum(com-deaths <0) >0){
+      neg_sp <- which(com-deaths <0)
+      pbirth[neg_sp] <- 0
+      deaths <- rmultinom(n = 1, size = d, prob = pbirth)
+    }
+
+    event <- rbinom(d, 1, prob = m) # immigration rate m: probability death replaced by immigrant
+    # immigration 1, birth 0
+    n_migrants <- sum(event)
+    n_births <- length(event) - n_migrants
+
+    births <- rmultinom(1, n_births, prob = pbirth)
+    migr <- rmultinom(1, n_migrants, prob = pmigr)
+    com <- com - deaths + births + migr
+    tseries[,t] <- com
+  }
   if(norm){
     tseries <- tseries/colSums(tseries)
   }
 
-  return(tseries)
-}
-
-# countSpecies function also reviewed: much shorter possible
-countSpecies <- function(pop, N){
-  counts = rep(0, N)
-  for(s in pop){
-    counts[s] = length(which(pop==s))
-  }
-  return(counts)
+  return(tseries[, (tskip +1):tend])
 }
