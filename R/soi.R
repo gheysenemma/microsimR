@@ -38,8 +38,6 @@ soi <- function(
   if(is.null(com)){
     counts <- c(migr_rates, runif(1))
     counts <- round((counts/sum(counts))*I)
-  } else if (I < sum(com)){
-    stop("the counts in the com vector cannot sum up to more than the number of individuals I")
   } else if(length(com) == N+1){
     counts <- com
   } else if(length(com) == N){
