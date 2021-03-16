@@ -16,7 +16,7 @@ glv<-function(N=4,A,growth_rates=runif(N),com=runif(N),tend=100){
   # checks perturb object and includes in parms
   # parms as matrix
   parms = cbind(rep(N,N), growth_rates, A)
-  times<-seq(0, tend, by=1)
+  times<-seq(1, tend, by=1)
   # run the simulation
   commtime<-lsoda(
     y = com, # initial state values for the ODE system
