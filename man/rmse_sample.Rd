@@ -18,3 +18,7 @@ in given species abundances matrix (time series) as a measure of convergence.
 The timepoint with the lowest RMSE-difference with respect to the previous timepoint
 is then extracted and a normalised sample is returned (proportions).
 }
+\examples{
+spab <- glv(N = 10, A = powerlawA(n = 10, alpha = 1.2), tend = 10000)
+sample <- rmse_sample(spab)
+}

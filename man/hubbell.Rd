@@ -54,3 +54,6 @@ Neutral species abundances simulation according to the Hubbell model.
 \details{
 For more theoretical background see: Rosindell, James et al. “The unified neutral theory of biodiversity and biogeography at age ten.” Trends in ecology & evolution vol. 26,7 (2011).
 }
+\examples{
+hubbell(N = 8, M = 10, I = 1000, d = 50, m = 0.02, tend = 100)
+}

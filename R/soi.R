@@ -16,13 +16,14 @@
 #' @param norm logical to indicate whether the time series should be returned
 #' with the abundances as proportions (norm = TRUE) or the raw counts (norm = FALSE, default)
 #' @return matrix with species abundances as rows and time points as columns
+#' @examples soi(N = 10, I = 1000, A = powerlawA(n = 10, alpha = 1.2), tend = 150, norm = TRUE)
 #' @export
 #'
 
 soi <- function(
   N, # nr of species in community
   I, # nr or sites in community: occupied by an individual or can be empty
-  A = generateA(N, c = 0.1), # interaction matrix
+  A, # interaction matrix
   migr_rates = runif(N, min = 0.1, max = 0.8), # species-specific immigration rates
   death_rates = runif(N, min = 0.01, max = 0.08), # species-specific extinction/death rates
   com = NULL,# initial abundances/counts (community) vector

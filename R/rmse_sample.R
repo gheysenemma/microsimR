@@ -5,6 +5,9 @@
 #' is then extracted and a normalised sample is returned (proportions).
 #' @param spab Species abundances matrix with OTUs in the rows and the timepoints as columns.
 #' @return A sample vector with the length equal to the number of rows of given input species abundances matrix.
+#' @examples
+#' spab <- glv(N = 10, A = powerlawA(n = 10, alpha = 1.2), tend = 10000)
+#' sample <- rmse_sample(spab)
 #' @export
 
 
@@ -26,7 +29,7 @@ rmse_t = function(spab){
 
   rmse <- rep.int(0, times = (K-1)) # initialize
   rmse <- sapply(X = 1:(K-1), FUN = function(j){
-    rmse[j] = Metrics::rmse(spab[,j], spab[,(j+1)])
+    rmse[j] = rmse(spab[,j], spab[,(j+1)])
   })
 
   return(rmse)

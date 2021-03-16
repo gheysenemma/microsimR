@@ -16,6 +16,7 @@
 #' @param norm logical to indicate whether the time series should be returned
 #' with the abundances as proportions (norm = TRUE) or the raw counts
 #' (norm = FALSE, default)
+#' @examples hubbell(N = 8, M = 10, I = 1000, d = 50, m = 0.02, tend = 100)
 #' @return matrix with species abundances as rows and time points as columns
 #' @export
 

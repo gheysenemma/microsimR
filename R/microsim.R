@@ -8,5 +8,8 @@
 #'
 #' @name microsim
 #'
-#' @import igraph geigen MASS deSolve Metrics
+#' @importFrom stats runif rmultinom rbinom rgamma rnorm
+#' @importFrom deSolve lsoda
+#' @importFrom poweRlaw rplcon
+#' @importFrom Metrics rmse
 NULL

@@ -7,7 +7,7 @@
 soi(
   N,
   I,
-  A = generateA(N, c = 0.1),
+  A,
   migr_rates = runif(N, min = 0.1, max = 0.8),
   death_rates = runif(N, min = 0.01, max = 0.08),
   com = NULL,
@@ -46,4 +46,7 @@ matrix with species abundances as rows and time points as columns
 \description{
 Generate time-series with the self-organised instability (SOI) model.
 Implements a K-leap method for accelerating stochastic simulation.
+}
+\examples{
+soi(N = 10, I = 1000, A = powerlawA(n = 10, alpha = 1.2), tend = 150, norm = TRUE)
 }
