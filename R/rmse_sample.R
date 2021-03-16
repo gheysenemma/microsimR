@@ -13,12 +13,12 @@
 
 rmse_sample <- function(spab){
   spab <- spab/colSums(spab)
-  rmse <- rmse_t(spab)
-  if(min(rmse) > (1e-04)){
+  rmse_vec <- rmse_t(spab)
+  if(min(rmse_vec) >= (1e-04)){
     warning(paste0("WARNING -  simulation did not converge. ",
                    "Run the simulation longer or change parameters."))
   }
-  sample <- spab[,which.min(rmse)]
+  sample <- spab[,which.min(rmse_vec)]
   return(sample)
 }
 
@@ -27,10 +27,10 @@ rmse_t = function(spab){
   N = nrow(spab)
   K = ncol(spab)
 
-  rmse <- rep.int(0, times = (K-1)) # initialize
-  rmse <- sapply(X = 1:(K-1), FUN = function(j){
-    rmse[j] = rmse(spab[,j], spab[,(j+1)])
+  rmse_vec <- rep.int(0, times = (K-1)) # initialize
+  rmse_vec <- sapply(X = 1:(K-1), FUN = function(j){
+    rmse_vec[j] = rmse(spab[,j], spab[,(j+1)])
   })
 
-  return(rmse)
+  return(rmse_vec)
 }
