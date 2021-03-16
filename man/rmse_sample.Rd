@@ -2,7 +2,7 @@
 \alias{rmse_sample}
 \title{Lowest-RMSE sample from time series}
 \description{
-Computes the Root Mean Square Error \eqn{RMSE_j = \sqrt{\frac{\sum{(t_j - t_{j+1})^2}}{K}}} between subsequent generations (columns) in given species abundances matrix (time series) as a measure of convergence. The timepoint with the lowest RMSE-difference with respect to the previous timepoint is then extracted and a normalised sample is returned (proportions).
+Computes the Root Mean Square Error between subsequent generations (columns) in given species abundances matrix (time series) as a measure of convergence. The timepoint with the lowest RMSE-difference with respect to the previous timepoint is then extracted and a normalised sample is returned (proportions).
 }
 \usage{
 rmse_sample(spab)
