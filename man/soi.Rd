@@ -14,6 +14,7 @@ soi(
   A = generateA(N, c = 0.1),
   migr_rates = runif(N, min = 0.1, max = 0.8),
   death_rates = runif(N, min = 0.01, max = 0.08),
+  com = NULL,
   tend,
   k = 5,
   perturb = NULL,
@@ -35,6 +36,9 @@ species-specific immigration probabilities (also determine initial abundances)
 }
   \item{death_rates}{
 species-specific extinction probabilities
+}
+  \item{com}{
+Initial community abundances vector. If NULL (default), based on migration rates.
 }
   \item{tend}{
 number of timepoints to be returned in the time series (nr of generations)

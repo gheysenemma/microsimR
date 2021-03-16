@@ -20,9 +20,9 @@
 #' @export
 
 hubbell <- function(
-  I, # community size (nr of individuals)
   N = NULL, # amount of local species
   M = NULL, # amount of meta species, incl local species (total species)
+  I, # community size (nr of individuals)
   d, # nr of deaths per generation
   m, # immigration rate (probability dead indiv replaced by meta-indiv)
   com = NULL, # initial community vector of length M where the ith element is the amount of individuals of the ith species

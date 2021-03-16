@@ -29,9 +29,9 @@ microbiome R package
 }
 \examples{
 # all samples normalised
-glv_samples <- cbind(glv(N = 8, A = generateA(8), tend = 100)[,100],
-    glv(N = 8, A = generateA(8, c = 0.3), tend = 200)[,200]) # matrix
-hubbell_sample <- hubbell(N = 4, M = 8, I = 1000, norm = TRUE, tend = 800)[,800] # vector
+glv_samples <- cbind(rmse_sample(glv(N = 8, A = generateA(8), tend = 10000)),
+    rmse_sample(glv(N = 8, A = generateA(8, c = 0.3), tend = 5000))) # matrix
+hubbell_sample <- hubbell(N = 4, M = 8, I = 1000, d = 10, m = 0.02, norm = TRUE, tend = 800)[,800] # vector
 soi_sample <- soi(N = 8, I = 1000, tend = 5000, norm = TRUE)[,5000] # vector
 
 physeq_samples <- asPhyloseq(glv_samples, hubbell_sample, soi_sample)

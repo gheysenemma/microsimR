@@ -16,7 +16,7 @@ rmse_sample(spab)
 
 \author{Gheysen, E.}
 
-\section{Warning }{Throws warning message if given simulation did not converge: lowest RMSE still larger than \eqn{1e-04}.}
+\details{Throws warning message if given simulation did not converge: lowest RMSE still larger than \eqn{1e-04}.}
 
 \seealso{
 \code{\link{asPhyloseq}}, \code{\link{glv}}, \code{\link{hubbell}}, \code{\link{soi}}

@@ -4,13 +4,7 @@
 \alias{glv}
 \title{Simulate time series with the generalized Lotka-Volterra model}
 \usage{
-glv(
-  N = 4,
-  A,
-  growth_rates = runif(N),
-  com = runif(N),
-  tend = 100
-)
+glv(N = 4, A, growth_rates = runif(N), com = runif(N), tend = 100)
 }
 \arguments{
 \item{N}{species number}
@@ -28,9 +22,6 @@ a matrix with species abundances as rows and time points as columns, column name
 }
 \description{
 Simulate a community time series using the generalized Lotka-Volterra model, defined as
-\eqn{\frac{dx}{dt}=x(b+Ax)}, where x is the vector of species abundances, A is the interaction matrix
-and b the vector of growth rates.
-}
-\examples{
-glv(N=4,generateA(4))
+\eqn{\frac{dx}{dt}=x(growth_rates+Ax)}, where x is the vector of species abundances, A is the interaction matrix
+and growth_rates the vector of growth rates.
 }

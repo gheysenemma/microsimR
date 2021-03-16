@@ -14,9 +14,10 @@
 asPhyloseq <- function(S, ...){
   param=c(as.list(environment()), list(...))
   names(param)=1:length(param)
-  merge = param[[1]]
+  merge = as.matrix(param[[1]])
   if(length(param)>1){
     for(i in 2:length(param)){
+      param[[i]] <- as.matrix(param[[i]])
       if(nrow(merge) != nrow(param[[i]])){
         stop("Samples must contain the same number of species.")
       }

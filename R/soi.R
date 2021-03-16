@@ -8,6 +8,7 @@
 #' @param A interaction matrix of dimension NxN
 #' @param migr_rates species-specific immigration probabilities (also determine initial abundances)
 #' @param death_rates species-specific extinction probabilities
+#' @param com Initial community abundances vector. If NULL (default), based on migration rates.
 #' @param tend number of timepoints to be returned in the time series (nr of generations)
 #' @param k the number of transition events that are allowed to take place during one leap.
 #' By default set to 5. Higher values reduce runtime, but also accuracy of the simulation.
