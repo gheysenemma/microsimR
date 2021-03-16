@@ -4,10 +4,12 @@
 \alias{rmse_sample}
 \title{Lowest-RMSE sample from time series}
 \usage{
-rmse_sample(spab)
+rmse_sample(spab, warn = TRUE)
 }
 \arguments{
 \item{spab}{Species abundances matrix with OTUs in the rows and the timepoints as columns.}
+
+\item{warn}{default TRUE, set to FALSE to suppress convergence warning}
 }
 \value{
 A sample vector with the length equal to the number of rows of given input species abundances matrix.

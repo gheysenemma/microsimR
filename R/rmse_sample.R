@@ -4,6 +4,7 @@
 #' The timepoint with the lowest RMSE-difference with respect to the previous timepoint
 #' is then extracted and a normalised sample is returned (proportions).
 #' @param spab Species abundances matrix with OTUs in the rows and the timepoints as columns.
+#' @param warn default TRUE, set to FALSE to suppress convergence warning
 #' @return A sample vector with the length equal to the number of rows of given input species abundances matrix.
 #' @examples
 #' spab <- glv(N = 10, A = powerlawA(n = 10, alpha = 1.2), tend = 10000)
@@ -11,12 +12,14 @@
 #' @export
 
 
-rmse_sample <- function(spab){
+rmse_sample <- function(spab, warn = TRUE){
   spab <- spab/colSums(spab)
   rmse_vec <- rmse_t(spab)
-  if(min(rmse_vec) >= (1e-04)){
-    warning(paste0("WARNING -  simulation did not converge. ",
-                   "Run the simulation longer or change parameters."))
+  if(warn){
+    if(min(rmse_vec) >= (0.0001)){
+      warning(paste0("WARNING -  simulation did not converge. ",
+                     "Run the simulation longer or change parameters."))
+    }
   }
   sample <- spab[,which.min(rmse_vec)]
   return(sample)
