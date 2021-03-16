@@ -9,6 +9,7 @@
 #' A phyloseq object requires at least a matrix of min. 2 columns,
 #' therefore an error is thrown if only a vector is given without additional vector/matrix objects.
 #' @return A microbiome phyloseq class object with species/OTUs as rows and samples as columns.
+#' @import phyloseq
 #' @export
 
 asPhyloseq <- function(S, ...){
