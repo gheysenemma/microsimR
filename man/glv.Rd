@@ -7,12 +7,9 @@
 glv(
   N = 4,
   A,
-  pbirth = runif(N),
+  growth_rates = runif(N),
   com = runif(N),
-  tstart = 0,
-  tend = 100,
-  tstep = 0.1,
-  perturb = NULL
+  tend = 100
 )
 }
 \arguments{
@@ -20,17 +17,11 @@ glv(
 
 \item{A}{interaction matrix}
 
-\item{pbirth}{growth rates}
+\item{growth_rates}{growth rates}
 
 \item{com}{initial abundances}
 
-\item{tstart}{initial time point}
-
 \item{tend}{final time point}
-
-\item{tstep}{time step}
-
-\item{perturb}{perturbation object describing growth changes}
 }
 \value{
 a matrix with species abundances as rows and time points as columns, column names give time points
@@ -41,8 +32,5 @@ Simulate a community time series using the generalized Lotka-Volterra model, def
 and b the vector of growth rates.
 }
 \examples{
-tsplot(glv(N=4,generateA(4)),header="gLV")
-}
-\seealso{
-\code{\link{ricker}} for the Ricker model
+glv(N=4,generateA(4))
 }
