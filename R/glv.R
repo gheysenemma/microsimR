@@ -30,7 +30,7 @@ glv <- function(
 
   # 2 Model application
   # Time specification
-  times <- seq(0, tend, by = 1)
+  times <- seq(0, tend, by = 0.01)
   # Model integration
   out <- ode(
     y = x,
@@ -39,6 +39,7 @@ glv <- function(
     parms = parameters
   )
   spab <- t(out[,2:ncol(out)])
+  spab <- spab[,round(seq(1, tend*100, length.out = tend))]
   if(norm){
     spab <- spab/colSums(spab)
   }

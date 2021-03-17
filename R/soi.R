@@ -12,7 +12,6 @@
 #' @param tend number of timepoints to be returned in the time series (nr of generations)
 #' @param k the number of transition events that are allowed to take place during one leap.
 #' By default set to 5. Higher values reduce runtime, but also accuracy of the simulation.
-#' @param perturb perturbation object
 #' @param norm logical to indicate whether the time series should be returned
 #' with the abundances as proportions (norm = TRUE) or the raw counts (norm = FALSE, default)
 #' @return matrix with species abundances as rows and time points as columns
@@ -29,7 +28,6 @@ soi <- function(
   com = NULL,# initial abundances/counts (community) vector
   tend, # nr of generations to be returned
   k = 5, # parameter limiting the nr of reactions (transitions) in a certain time interval
-  perturb = NULL, # perturbation object: TO DO
   norm = FALSE
 ){
 

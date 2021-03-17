@@ -13,7 +13,6 @@ soi(
   com = NULL,
   tend,
   k = 5,
-  perturb = NULL,
   norm = FALSE
 )
 }
@@ -34,8 +33,6 @@ soi(
 
 \item{k}{the number of transition events that are allowed to take place during one leap.
 By default set to 5. Higher values reduce runtime, but also accuracy of the simulation.}
-
-\item{perturb}{perturbation object}
 
 \item{norm}{logical to indicate whether the time series should be returned
 with the abundances as proportions (norm = TRUE) or the raw counts (norm = FALSE, default)}
