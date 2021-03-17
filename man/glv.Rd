@@ -4,24 +4,35 @@
 \alias{glv}
 \title{Simulate time series with the generalized Lotka-Volterra model}
 \usage{
-glv(N = 4, A, growth_rates = runif(N), com = runif(N), tend = 100)
+glv(N, A, b = runif(N), x = runif(N), tend = 1000, norm = FALSE)
 }
 \arguments{
 \item{N}{species number}
 
 \item{A}{interaction matrix}
 
-\item{growth_rates}{growth rates}
+\item{b}{growth rates}
 
-\item{com}{initial abundances}
+\item{x}{initial abundances}
 
-\item{tend}{final time point}
+\item{tend}{timepoints}
+
+\item{norm}{return normalised abundances (proportions in each generation)}
 }
 \value{
 a matrix with species abundances as rows and time points as columns, column names give time points
 }
 \description{
 Simulate a community time series using the generalized Lotka-Volterra model, defined as
-\eqn{\frac{dx}{dt}=x(growth_rates+Ax)}, where x is the vector of species abundances, A is the interaction matrix
+dx/dt = x(b+Ax), where x is the vector of species abundances, A is the interaction matrix
 and growth_rates the vector of growth rates.
+}
+\note{
+Calls upon the lsoda function from package deSolve to solve the ODE. If function crashes, consider running again with while loop and tryCatch handlings.
+}
+\examples{
+glv(N = 4, A = powerlawA(n = 4, alpha = 2), tend = 1000)
+}
+\seealso{
+deSolve::lsoda
 }
