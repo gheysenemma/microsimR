@@ -4,7 +4,7 @@
 \alias{powerlawA}
 \title{Interaction matrix with Power-Law network adjacency matrix}
 \usage{
-powerlawA(n, alpha, stdev = 1, s = 1)
+powerlawA(n, alpha, stdev = 1, s = NULL)
 }
 \arguments{
 \item{n}{the number of species}
@@ -17,7 +17,8 @@ In other words, values of alpha close to 1 will give Strongly Interacting Specie
 \item{stdev}{the standard deviation parameter of the normal distribution with mean 0 from which
 the elements of the nominal interspecific interaction matrix N are drawn}
 
-\item{s}{scaling parameter with which the final global interaction matrix A is multiplied}
+\item{s}{scaling parameter with which the final global interaction matrix A is multiplied.
+Default set to NULL where s is set to 0.1 \* max(A) after constructing the matrix A = NH \* G}
 }
 \value{
 The global interaction matrix A with n rows and n columns.

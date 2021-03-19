@@ -13,7 +13,8 @@
 #' In other words, values of alpha close to 1 will give Strongly Interacting Species (SIS).
 #' @param stdev the standard deviation parameter of the normal distribution with mean 0 from which
 #' the elements of the nominal interspecific interaction matrix N are drawn
-#' @param s scaling parameter with which the final global interaction matrix A is multiplied
+#' @param s scaling parameter with which the final global interaction matrix A is multiplied.
+#' Default set to NULL where s is set to 0.1 \* max(A) after constructing the matrix A = NH \* G
 #' @return The global interaction matrix A with n rows and n columns.
 #' @examples
 #' # Low interaction heterogeneity
@@ -26,7 +27,7 @@ powerlawA <- function(
   n, # number of species
   alpha, # power-law distribution parameter
   stdev = 1, # sd normal distribution
-  s = 1 # scaling parameter
+  s = NULL # scaling parameter, default: 0.1*max(A)
 ){
   # Nominal Interspecific Interaction matrix N
   N <- matrix(
@@ -36,26 +37,33 @@ powerlawA <- function(
   )
   diag(N) <- 0
 
+  # power law sample
+  pl <- rplcon(n = n, xmin = 1, alpha = alpha)
   # Interaction strength heterogeneity H
-  H <- rplcon(n = n, xmin = 1, alpha = alpha)
-  H <- H / mean(H)
+  H <- sapply(1:n, FUN = function(i){
+    1 + ((pl[i]-min(pl))/(max(pl)-min(pl)))
+  })
   H <- diag(H)
 
   # Adjacency matrix G of power-law out-degree digraph ecological network
-  h_bar <- rplcon(n = n, xmin = 1, alpha = alpha)
+  d <- 0.1*n
   h <- sapply(1:n, FUN = function(i){
     min(
-      ceiling(h_bar[i]/mean(h_bar)),
+      ceiling(d*pl[i]/mean(pl)),
       n
     )
   })
   G <- matrix(0, nrow = n, ncol = n)
   for(i in 1:n){
     index <- sample(x = 1:n, size = h[i])
-    G[index, i] <- i
+    G[index, i] <- 1
   }
 
-  A <- N %*% H * G * s
+  A <- N %*% H * G
+  if(is.null(s)){
+    s <- 0.1*max(A)
+  }
+  A <- A * s
   diag(A) <- -1
   colnames(A) <- 1:n
   rownames(A) <- 1:n
