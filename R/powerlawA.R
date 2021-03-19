@@ -60,7 +60,6 @@ powerlawA <- function(
   }
 
   A <- N %*% H * G
-  A <- A/max(A)
   if(is.null(s)){
     s <- 0.1*max(A)
   }
