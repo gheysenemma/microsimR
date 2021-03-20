@@ -85,7 +85,7 @@ hubbell <- function(
 
   tseries <- matrix(0, nrow = M, ncol = tend)
   colnames(tseries) <- paste0("t", 1:tend)
-  rownames(tseries) <- sp_names
+  rownames(tseries) <- 1:M
 
   com[which(com < 0)] <- 0
   tseries[,1] <- com
