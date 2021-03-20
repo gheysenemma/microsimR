@@ -58,8 +58,6 @@ hubbell <- function(
     pbirth = c(pbirth, rep(0, times = (M-N)))
     pbirth = pbirth/sum(pbirth)
   }
-  sp_names <- paste0("sp_", 1:M)
-  names(pbirth) <- sp_names
 
   if(is.null(M) & is.null(pmigr)){
     stop("Please give the amount of meta species M (incl local) or a migration probability vector of length M")
@@ -75,14 +73,12 @@ hubbell <- function(
   } else if (length(pmigr)!=M){
     stop("pmigr vector must be of length M")
   }
-  names(pmigr) <- sp_names
 
   if(is.null(com)){
     com = round(I*pbirth)
   } else if (length(com)!=M){
     stop("length of com vector must be equal to M")
   }
-  names(com) <- sp_names
 
   #################################################################################
   # The simulation
@@ -91,11 +87,12 @@ hubbell <- function(
   colnames(tseries) <- paste0("t", 1:tend)
   rownames(tseries) <- sp_names
 
+  com[which(com < 0)] <- 0
   tseries[,1] <- com
   for (t in 2:tend){
     # Each iteration the probability of births is updated by the counts
     pbirth <- com/sum(com)
-    pbirth[pbirth < 0] <- 0
+    pbirth[which(pbirth < 0)] <- 0
     # Probability of births is used to pick the species that will die
     # because species with count 0 will have probability 0 and species not present in the community can also not die
     deaths <- rmultinom(n = 1, size = d, prob = pbirth)
@@ -113,6 +110,7 @@ hubbell <- function(
     births <- rmultinom(1, n_births, prob = pbirth)
     migr <- rmultinom(1, n_migrants, prob = pmigr)
     com <- com - deaths + births + migr
+    com[which(com < 0)] <- 0
     tseries[,t] <- com
   }
   if(norm){
