@@ -7,9 +7,9 @@
 hubbell(
   N,
   M,
-  I,
-  d,
-  m,
+  I = 1000,
+  d = 10,
+  m = 0.02,
   pbirth = runif(N, min = 0, max = 1),
   pmigr = runif(M, min = 0, max = 1),
   tskip = 0,

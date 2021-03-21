@@ -12,4 +12,5 @@
 #' @importFrom poweRlaw rplcon
 #' @importFrom Metrics rmse
 #' @importFrom deSolve ode
+#' @import phyloseq
 NULL
