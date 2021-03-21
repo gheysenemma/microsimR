@@ -23,9 +23,9 @@
 hubbell <- function(
   N, # amount of local species
   M, # amount of meta species, incl local species (total species)
-  I, # community size (nr of individuals)
-  d, # nr of deaths per generation
-  m, # immigration rate (probability dead indiv replaced by meta-indiv)
+  I = 1000, # community size (nr of individuals)
+  d = 10, # nr of deaths per generation
+  m = 0.02, # immigration rate (probability dead indiv replaced by meta-indiv)
   pbirth = runif(N, min = 0, max = 1), # probabilities of birth
   pmigr = runif(M, min = 0, max = 1), # probabilities of migration
   tskip = 0, # amount of timepoints to not return
@@ -41,8 +41,11 @@ hubbell <- function(
   pbirth <- pbirth/sum(pbirth)
   pmigr <- pmigr/sum(pmigr)
   com <- ceiling(I*pbirth)
-  if(sum(com)!=I){
-    ind <- sample(1:N, size = I-sum(com), prob = 1-pbirth)
+  if(sum(com)<I){
+    ind <- sample(1:M, size = I-sum(com), prob = pbirth)
+    com[ind] <- com[ind] +1
+  } else if(sum(com)>I){
+    ind <- sample(1:M, size = sum(com)-I, prob = 1-pbirth)
     com[ind] <- com[ind] -1
   }
 
