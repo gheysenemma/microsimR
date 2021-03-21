@@ -5,14 +5,13 @@
 \title{Hubbell community simulation}
 \usage{
 hubbell(
-  N = NULL,
-  M = NULL,
+  N,
+  M,
   I,
   d,
   m,
-  com = NULL,
-  pbirth = NULL,
-  pmigr = NULL,
+  pbirth = runif(N, min = 0, max = 1),
+  pmigr = runif(M, min = 0, max = 1),
   tskip = 0,
   tend,
   norm = FALSE
@@ -30,9 +29,8 @@ hubbell(
 \item{m}{Immigration rate: the probability that a death in the local community is
 replaced by a migrant of the metacommunity rather than by the birth of a local community member}
 
-\item{com}{initial community vector of length M where the ith element is the amount of individuals of the ith species}
-
-\item{pbirth}{probabilities of birth}
+\item{pbirth}{probabilities of birth to construct the initial abundances,
+will be updated in all next generations with previous abundances}
 
 \item{pmigr}{probabilities of migration}
 
@@ -51,9 +49,9 @@ matrix with species abundances as rows and time points as columns
 \description{
 Neutral species abundances simulation according to the Hubbell model.
 }
-\details{
-For more theoretical background see: Rosindell, James et al. “The unified neutral theory of biodiversity and biogeography at age ten.” Trends in ecology & evolution vol. 26,7 (2011).
-}
 \examples{
 hubbell(N = 8, M = 10, I = 1000, d = 50, m = 0.02, tend = 100)
+}
+\references{
+Rosindell, James et al. “The unified neutral theory of biodiversity and biogeography at age ten.” Trends in ecology & evolution vol. 26,7 (2011).
 }

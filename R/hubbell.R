@@ -1,15 +1,14 @@
 #' @title Hubbell community simulation
 #' @description Neutral species abundances simulation according to the Hubbell model.
-#' @details For more theoretical background see: Rosindell, James et al. “The unified neutral theory of biodiversity and biogeography at age ten.” Trends in ecology & evolution vol. 26,7 (2011).
-#' @param I Fixed amount of individuals in the local community
 #' @param N Amount of different species initially in the local community
 #' @param M Amount of different species in the metacommunity, including those of the local community
+#' @param I Fixed amount of individuals in the local community
 #' @param d Fixed amount of deaths of local community individuals in each generation
-#' @param pbirth probabilities of birth
+#' @param pbirth probabilities of birth to construct the initial abundances,
+#' will be updated in all next generations with previous abundances
 #' @param m Immigration rate: the probability that a death in the local community is
 #' replaced by a migrant of the metacommunity rather than by the birth of a local community member
 #' @param pmigr probabilities of migration
-#' @param com initial community vector of length M where the ith element is the amount of individuals of the ith species
 #' @param tskip Nr of generations that should not be included in the outputted species
 #' abundance matrix.
 #' @param tend Nr of simulations to be simulated.
@@ -18,66 +17,33 @@
 #' (norm = FALSE, default)
 #' @examples hubbell(N = 8, M = 10, I = 1000, d = 50, m = 0.02, tend = 100)
 #' @return matrix with species abundances as rows and time points as columns
+#' @references Rosindell, James et al. “The unified neutral theory of biodiversity and biogeography at age ten.” Trends in ecology & evolution vol. 26,7 (2011).
 #' @export
 
 hubbell <- function(
-  N = NULL, # amount of local species
-  M = NULL, # amount of meta species, incl local species (total species)
+  N, # amount of local species
+  M, # amount of meta species, incl local species (total species)
   I, # community size (nr of individuals)
   d, # nr of deaths per generation
   m, # immigration rate (probability dead indiv replaced by meta-indiv)
-  com = NULL, # initial community vector of length M where the ith element is the amount of individuals of the ith species
-  pbirth = NULL, # probabilities of birth
-  pmigr = NULL, # probabilities of migration
+  pbirth = runif(N, min = 0, max = 1), # probabilities of birth
+  pmigr = runif(M, min = 0, max = 1), # probabilities of migration
   tskip = 0, # amount of timepoints to not return
   tend, # amount of time points
   norm = FALSE
 ){
   #####################################################################################
   # First setting the function arguments right
-
-  if(is.null(N) & is.null(pbirth)){
-    stop("Please give the amount of local species N or a birth probability vector of length N")
-  } else if (is.null(N)){
-    if(sum(pbirth)==1){
-      N = length(pbirth[pbirth>0])
-    } else {
-      stop("pbirth probability vector must be values between 0 and 1, and sum up to 1")
-    }
-  } else if (is.null(pbirth)){
-    pbirth = c(
-      # Local species: probabilities of birth from uniform distribution
-      runif(N, min = 0, max = 1),
-      # Meta species: probabilities of birth initially set to 0
-      rep(0, times = (M - N))
-    )
-    pbirth = pbirth/sum(pbirth)
-  } else if (sum(pbirth>0)>N){
-    stop("do not give more nonzero probabilties in the pbirth vector than there are local species")
-  } else if (!is.null(pbirth)){
-    pbirth = c(pbirth, rep(0, times = (M-N)))
-    pbirth = pbirth/sum(pbirth)
+  if(length(pbirth)!=N | !length(pmigr)!=M){
+    stop("Either length of pbirth vector does not match with N or length of pmigr vector does not match with M")
   }
-
-  if(is.null(M) & is.null(pmigr)){
-    stop("Please give the amount of meta species M (incl local) or a migration probability vector of length M")
-  } else if (is.null(M)){
-    if(sum(pmigr)==1){
-      M = length(pmigr)
-    } else {
-      stop("pmigr probability vector must be values between 0 and 1, and sum up to 1")
-    }
-  } else if (is.null(pmigr)){
-    pmigr = runif(M, min = 0, max = 1)
-    pmigr = pmigr/sum(pmigr)
-  } else if (length(pmigr)!=M){
-    stop("pmigr vector must be of length M")
-  }
-
-  if(is.null(com)){
-    com = round(I*pbirth)
-  } else if (length(com)!=M){
-    stop("length of com vector must be equal to M")
+  pbirth <- c(pbirth, rep(0, times = (M-N)))
+  pbirth <- pbirth/sum(pbirth)
+  pmigr <- pmigr/sum(pmigr)
+  com <- ceiling(I*pbirth)
+  if(sum(com)!=I){
+    ind <- sample(1:N, size = I-sum(com), prob = 1-pbirth)
+    com[ind] <- com[ind] -1
   }
 
   #################################################################################
