@@ -34,7 +34,7 @@ hubbell <- function(
 ){
   #####################################################################################
   # First setting the function arguments right
-  if(length(pbirth)!=N | !length(pmigr)!=M){
+  if(length(pbirth)!=N | length(pmigr)!=M){
     stop("Either length of pbirth vector does not match with N or length of pmigr vector does not match with M")
   }
   pbirth <- c(pbirth, rep(0, times = (M-N)))
