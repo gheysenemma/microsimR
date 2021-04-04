@@ -27,7 +27,7 @@ powerlawA <- function(
   n, # number of species
   alpha, # power-law distribution parameter
   stdev = 1, # sd normal distribution
-  s = NULL # scaling parameter, default: 0.1*max(A)
+  s = NULL # scaling parameter, default: 0.1/max(A)
 ){
   # Nominal Interspecific Interaction matrix N
   N <- matrix(
@@ -35,7 +35,7 @@ powerlawA <- function(
     nrow = n,
     ncol = n
   )
-  diag(N) <- 0
+  #diag(N) <- 0
 
   # power law sample
   pl <- rplcon(n = n, xmin = 1, alpha = alpha)
@@ -60,9 +60,8 @@ powerlawA <- function(
   }
 
   A <- N %*% H * G
-  A <- A/max(A)
   if(is.null(s)){
-    s <- 1/max(A)
+    s <- 0.1/max(A)
   }
   A <- A * s
   diag(A) <- -1
