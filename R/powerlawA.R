@@ -14,7 +14,7 @@
 #' @param stdev the standard deviation parameter of the normal distribution with mean 0 from which
 #' the elements of the nominal interspecific interaction matrix N are drawn
 #' @param s scaling parameter with which the final global interaction matrix A is multiplied.
-#' Default set to NULL where s is set to 0.1 \* max(A) after constructing the matrix A = NH \* G
+#' Default set to NULL where s is set to 0.1*max(A) after constructing the matrix A = NH*G
 #' @return The global interaction matrix A with n rows and n columns.
 #' @examples
 #' # Low interaction heterogeneity
@@ -27,7 +27,7 @@ powerlawA <- function(
   n, # number of species
   alpha, # power-law distribution parameter
   stdev = 1, # sd normal distribution
-  s = NULL # scaling parameter, default: 0.1/max(A)
+  s = 0.1 # scaling parameter, default: 0.1/max(A)
 ){
   # Nominal Interspecific Interaction matrix N
   N <- matrix(
@@ -60,10 +60,7 @@ powerlawA <- function(
   }
 
   A <- N %*% H * G
-  if(is.null(s)){
-    s <- 0.1/max(A)
-  }
-  A <- A * s
+  A <- A*s/max(A)
   diag(A) <- -1
   colnames(A) <- 1:n
   rownames(A) <- 1:n

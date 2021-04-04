@@ -18,7 +18,7 @@ In other words, values of alpha close to 1 will give Strongly Interacting Specie
 the elements of the nominal interspecific interaction matrix N are drawn}
 
 \item{s}{scaling parameter with which the final global interaction matrix A is multiplied.
-Default set to NULL where s is set to 0.1 \* max(A) after constructing the matrix A = NH \* G}
+Default set to NULL where s is set to 0.1*max(A) after constructing the matrix A = NH*G}
 }
 \value{
 The global interaction matrix A with n rows and n columns.
