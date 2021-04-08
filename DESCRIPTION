@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Emma Gheysen
 Maintainer: Emma Gheysen <emma.gheysen@student.kuleuven.be>
 Description: generation of time series and cross-sectional data with support of environmental influence (to be discussed), sample group structure (e.g. time series from different hosts or healthy vs diseased), adjustable external noise level and ideally perturbations
-License: Artistic-2.0 | file LICENSE.txt
+License: Artistic-2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

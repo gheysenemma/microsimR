@@ -31,7 +31,7 @@ Other functions included in the package:
 1) RMSE-based sampling function given a time series: `microsim::rmse_sample()`
 2) `phyloseq` wrapper function (samples / full time series): `microsim::asPhyloseq()`
 3) Power-law interaction matrix decomposition `microsim::powerlawA()`
-
+4) Random interaction matrix by uniform distribution `microsim::randomA()`
 
 ### Acknowledgements
 

@@ -4,7 +4,7 @@
 \alias{powerlawA}
 \title{Interaction matrix with Power-Law network adjacency matrix}
 \usage{
-powerlawA(n, alpha, stdev = 1, s = NULL)
+powerlawA(n, alpha, stdev = 1, s = 0.1)
 }
 \arguments{
 \item{n}{the number of species}
