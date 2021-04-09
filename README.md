@@ -1,5 +1,5 @@
 # microsim
-A Simulator Package with a collection of basic community models that outputs count data of microbial communities.
+A simulator package in R containing a collection of basic community models that outputs count data of microbial communities, integrating various statistical and computational methodologies for minimal runtime.
 
 ### Installation
 
@@ -39,6 +39,6 @@ This package is constructed as part of a master's thesis at KU Leuven 2020-2021.
 - Author: Emma Gheysen
 
 Under supervision of:
-- Promotor: Prof. Karoline Faust
-- Co-promotor: Prof. Leo Lahti
-- Mentor: Daniel Rios Garza
+- Promotor: Prof. Karoline Faust (KU Leuven)
+- Co-promotor: Prof. Leo Lahti (Turku University)
+- Mentor: Daniel Rios Garza (KU Leuven)
