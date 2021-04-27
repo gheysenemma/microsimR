@@ -5,6 +5,7 @@
 #' is then extracted and a normalised sample is returned (proportions).
 #' @param spab Species abundances matrix with OTUs in the rows and the timepoints as columns.
 #' @param warn default TRUE, set to FALSE to suppress convergence warning
+#' @param norm default TRUE: compute RMSE on compositional time series (abundances per time point sum to 1)
 #' @return A sample vector with the length equal to the number of rows of given input species abundances matrix.
 #' @examples
 #' spab <- glv(N = 10, A = powerlawA(n = 10, alpha = 1.2), tend = 10000)
@@ -12,8 +13,10 @@
 #' @export
 
 
-rmse_sample <- function(spab, warn = TRUE){
-  spab <- spab/colSums(spab)
+rmse_sample <- function(spab, warn = TRUE, norm = TRUE){
+  if(norm){
+    spab <- spab/colSums(spab)
+  }
   rmse_vec <- rmse_t(spab)
   if(warn){
     if(min(rmse_vec) >= (0.0001)){
