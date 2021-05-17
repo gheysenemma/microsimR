@@ -28,23 +28,7 @@ randomA <- function(
   )
   diag(A) <- d
   c_obs <- (length(A[A!=0])-N)/(ncol(A)*ncol(A)-N)
-  if(c_obs < c){
-    edgeNumAdded = 0
-    while(c_obs < c){
-      # source node of edge
-      xpos = sample(1:N, size = 1)
-      # target node of edge
-      ypos = sample(1:N, size = 1)
-      # avoid diagonal
-      if(xpos != ypos){
-        if(A[xpos,ypos]==0){
-          edgeNumAdded = edgeNumAdded +1
-        }
-        A[xpos,ypos] = 1
-        c_obs = getConnectance(A)
-      }
-    }
-  } else if (c_obs > c){
+  if (c_obs > c){
     edgeNumRemoved = 0
     while(c_obs > c){
       xpos = sample(1:N, size = 1)
