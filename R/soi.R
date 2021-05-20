@@ -146,7 +146,7 @@ soi <- function(
                                         pos_inter_rates, neg_inter_rates)
   }
   if(norm){
-    series <- series/colSums(series)
+    series <- t(t(series)/colSums(series))
   }
 
   return(series)

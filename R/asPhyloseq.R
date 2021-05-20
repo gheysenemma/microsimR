@@ -30,6 +30,9 @@ asPhyloseq <- function(S, ...){
       if(nrow(merge) != nrow(param[[i]])){
         stop("Samples must contain the same number of species.")
       }
+      if(ncol(param[[i]]) == sum(colSums(param[[i]]))){
+        stop("Samples should consist of absolute count data (no relative abundances)")
+      }
       merge = cbind(merge, param[[i]])
     }
   } else {
@@ -39,18 +42,6 @@ asPhyloseq <- function(S, ...){
   }
   rownames(merge) <- paste0("OTU", 1:nrow(merge))
   colnames(merge) <- paste0("Sample", 1:ncol(merge))
-
-  #if(!"phyloseq" %in% rownames(installed.packages())){
-  #  warning("phyloseq package not yet installed. automatic installation")
-  #  if (!requireNamespace("BiocManager", quietly = TRUE)){
-  #    install.packages("BiocManager")
-  #  }
-  #  BiocManager::install("phyloseq")
-  #}
-  #if(!"phyloseq" %in% (.packages())){
-  #  warning("phyloseq package installed but not yet loaded. automatic loading")
-  #  library("phyloseq")
-  #}
 
   physeq = phyloseq(otu_table(merge, taxa_are_rows = TRUE))
   return(physeq)

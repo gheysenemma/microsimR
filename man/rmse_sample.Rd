@@ -4,7 +4,7 @@
 \alias{rmse_sample}
 \title{Lowest-RMSE sample from time series}
 \usage{
-rmse_sample(spab, warn = TRUE, norm = TRUE)
+rmse_sample(spab, warn = TRUE, norm = TRUE, cutoff = 1e-04)
 }
 \arguments{
 \item{spab}{Species abundances matrix with OTUs in the rows and the timepoints as columns.}
@@ -12,6 +12,8 @@ rmse_sample(spab, warn = TRUE, norm = TRUE)
 \item{warn}{default TRUE, set to FALSE to suppress convergence warning}
 
 \item{norm}{default TRUE: compute RMSE on compositional time series (abundances per time point sum to 1)}
+
+\item{cutoff}{The value the minimum RMSE cannot exceed in order to declare convergence.}
 }
 \value{
 A sample vector with the length equal to the number of rows of given input species abundances matrix.

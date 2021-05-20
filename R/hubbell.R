@@ -83,7 +83,7 @@ hubbell <- function(
     tseries[,t] <- com
   }
   if(norm){
-    tseries <- tseries/colSums(tseries)
+    tseries <- t(t(tseries)/colSums(tseries))
   }
 
   return(tseries[, (tskip +1):tend])

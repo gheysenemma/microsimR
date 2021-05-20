@@ -41,7 +41,7 @@ glv <- function(
   spab <- t(out[,2:ncol(out)])
   spab <- spab[,round(seq(1, tend*100, length.out = tend))]
   if(norm){
-    spab <- spab/colSums(spab)
+    spab <- t(t(spab)/colSums(spab))
   }
   return(spab)
 }
